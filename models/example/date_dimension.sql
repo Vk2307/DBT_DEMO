@@ -6,24 +6,21 @@ WITH CTE AS(
     HOUR(TO_TIMESTAMP(STARTED_AT)) AS HOUR_STARTED_AT,
     DAYNAME(TO_TIMESTAMP(STARTED_AT)) AS DAY_OF_WEEK,
     
-    CASE
-    WHEN DAYNAME(TO_TIMESTAMP(STARTED_AT)) IN ('Sat','Sun')
-    THEN 'WEEKEND'
-    ELSE'BUSINESSDAY'
-    END AS DAY_TYPE,
+   
 
-    CASE
-    WHEN MONTH(TO_TIMESTAMP(STARTED_AT)) IN (10,11,12,1)
-    THEN 'WINTER'
-    WHEN MONTH(TO_TIMESTAMP(STARTED_AT)) IN (2,3,4,5)
-    THEN 'SUMMER'
-    ELSE 'RAINY'
-    END AS STATION_OF_YEAR
+    {{day_type('STARTED_AT')}} as DAY_TYPE,
+
+    {{get_session('STARTED_AT')}} AS SESSION_OF_YEAAR,
+
+    {{function1('STARTED_AT')}}
+
+   
+
+
 
     from 
     {{ source('demo', 'bike') }}
-
-    where STARTED_AT !='started_at'
+        where STARTED_AT !='started_at'
 
 )
 
